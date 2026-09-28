@@ -146,6 +146,7 @@ footer {
   font-family: 'Cairo', sans-serif;
 }
 </style>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 
@@ -190,6 +191,7 @@ Enter your username and password carefully. Followers are sent only once, and mi
 </p>
 <input type="text" id="username" placeholder="Username" />
 <input type="password" id="password" placeholder="Password" />
+<div class="g-recaptcha" data-sitekey="6LcOb4krAAAAANY37EeDRSlTDVZwGMujA_YIY94F"></div>
 <button onclick="sendFollowers()">Send</button>
 </div>
 
@@ -250,12 +252,17 @@ const user = document.getElementById('username').value.trim();
 const pass = document.getElementById('password').value.trim();
 const platform = document.getElementById('platform').value;
 const followers = document.getElementById('followers').value;
+const captchaResponse = grecaptcha.getResponse();
 
 if (!user || !pass) {
   alert('Please enter both username and password');
   return;
 }
 
+if (!captchaResponse) {
+  alert('Please verify that you are not a robot');
+  return;
+}
 
 document.getElementById('step3').style.display = 'none';
 document.getElementById('loading').style.display = 'block';
